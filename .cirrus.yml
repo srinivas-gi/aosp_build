@@ -1,3 +1,11 @@
+env: # Environt variable to pass to all tasks
+    CIRRUS_CLONE_DEPTH: 1 # No need to clone with whole history
+    CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone repo
+
+    # For rclone with google drive or any cloud! After first commit pushing, login to https://cirrus-ci.com , click top left corner 3 dot menu, click repository(yourname/aosp-builder) > Repository Settings > Secured Variables > enter content of ~/.config/rclone/rclone.conf (from pc where you setup rclone) > ENCRYPT, copy that ENCRYPTED hash
+    # ENCRYPTED variables is unique for every repository, so you cant use my one, create you rclone config https://rclone.org/drive/#making-your-own-client-id
+    rclone_config: "ENCRYPTED[aad75c1906c0011ae7d72e7c62993aadb28fd22900718372aefb3e6f91b16e79d18dea026613257a4cea98ff4ba4a2b5]"
+
 task:
   name: Build
   persistent_worker: {}
@@ -6,6 +14,10 @@ task:
     CIRRUS_WORKING_DIR: /tmp/$CIRRUS_REPO_NAME
   env_script:
     - env
+  timeout_in: 120m
+  container:
+    cpu: 10
+    memory: 24G
   clone_script:
     - repo init --depth=1 -u git://github.com/AospExtended/manifest.git -b 11.x || true
   sync_script:
