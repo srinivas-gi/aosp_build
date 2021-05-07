@@ -1,16 +1,31 @@
-env: # Environment variables to pass to all tasks
-    CIRRUS_CLONE_DEPTH: 1 # No need to clone with the whole history
-    CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone the aosp-builder repo
-    rclone_config: "ENCRYPTED[aad75c1906c0011ae7d72e7c62993aadb28fd22900718372aefb3e6f91b16e79d18dea026613257a4cea98ff4ba4a2b5]"
-
 task:
-    name: aosp # Project name
-    timeout_in: 120m # Otherwise it will timeout at 60m automatically, 120m highest in free account
-    container:
-      image: PixelExperience/aosp:latest
-      cpu: 8  #8 or less cpu for dummy build, 8 cpu for the final build, 8cpu highest for free accounts. Don't try to use more than 8cpu as free user, you may get blocked by ci.
-      memory: 32G # So that we can have ram when needed, 32G highest
-    download_ccache_background_script: # To download ccache in background
-      - ./download_ccache # Ccache download script
-    run_script:
-      - ./script.sh
+  name: Build
+  persistent_worker: {}
+  env:
+    USE_CCACHE: 1
+    CIRRUS_WORKING_DIR: /tmp/$CIRRUS_REPO_NAME
+  env_script:
+    - env
+  rom_sync:
+    - repo init -u https://github.com/PixelExperience/manifest -b eleven
+    - repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+  device:
+    - git clone https://github.com/P-Salik/android_device_realme_RMX1941 device/rea>
+    - git clone https://github.com/P-Salik/android_vendor_realme_RMX1941 vendor/rea>
+    - cd /external/selinux git fetch https://github.com/PixelExperience/external_se>
+    - cd /frameworks/base git fetch https://github.com/PixelExperience/frameworks_b>
+    - cd /frameworks/opt/net/wifi git fetch https://github.com/PixelExperience/fram>
+    - cd /frameworks/opt/net/ims git fetch https://github.com/PixelExperience/frame>
+    - cd ../../../../
+  build_script:
+    - source build/envsetup.sh
+    - lunch aosp_RMX1941-user
+    - mka bacon -j8
+  ccache_stats_script:
+    - ccache -s
+  upload_script: |
+    up() {
+      curl --upload-file $1 https://transfer.sh/$(basename $1); echo
+      # 14 days, 10 GB limit
+    }
+    up out/target/product/mido/*.zip
