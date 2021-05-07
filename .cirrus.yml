@@ -1,50 +1,23 @@
 env: # Environt variable to pass to all tasks
     CIRRUS_CLONE_DEPTH: 1 # No need to clone with whole history
     CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone repo
+    rclone_config: "ENCRYPTED[1e4bfe76d933bdff3a61adb9529d60287b19bff7e61797b027ac3df52af879bb5a9d03d72cd0880ff1c01871b31d1e7a"
 
-    # For rclone with google drive or any cloud! After first commit pushing, login to https://cirrus-ci.com , click top left corner 3 dot menu, click repository(yourname/aosp-builder) > Repository Settings > Secured Variables > enter content of ~/.config/rclone/rclone.conf (from pc where you setup rclone) > ENCRYPT, copy that ENCRYPTED hash
-    # ENCRYPTED variables is unique for every repository, so you cant use my one, create you rclone config https://rclone.org/drive/#making-your-own-client-id
-    rclone_config: "ENCRYPTED[aad75c1906c0011ae7d72e7c62993aadb28fd22900718372aefb3e6f91b16e79d18dea026613257a4cea98ff4ba4a2b5]"
 
 task:
-  name: Build
-  persistent_worker: {}
-  env:
-    USE_CCACHE: 1
-    CIRRUS_WORKING_DIR: /tmp/$CIRRUS_REPO_NAME
-  env_script:
-    - env
-  timeout_in: 120m
-  container:
-    cpu: 8
-    memory: 24G
-  clone_script:
-    - repo init --depth=1 -u git://github.com/AospExtended/manifest.git -b 11.x || true
-  sync_script:
-    - rm -rf .repo/local_manifests || true
-    - git clone https://github.com/Apon77Lab/android_.repo_local_manifests.git --depth 1 -b aex .repo/local_manifests
-    - repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all)
-  trees_script:
-    - git clone https://github.com/P-Salik/android_device_realme_RMX1941 device/realme/RMX1941
-    - git clone https://github.com/P-Salik/android_vendor_realme_RMX1941 vendor/realme/RMX1941
-    - cd /external/selinux git fetch https://github.com/PixelExperience/external_selinux && git cherry-pick 9d6ebe89430ffe0aeeb156f572b2a810f9dc98cc
-    - cd ../..
-    - cd /frameworks/base git fetch https://github.com/PixelExperience/frameworks_base && git cherry-pick 37f5a323245b0fd6269752742a2eb7aa3cae24a7
-    - cd ../..
-    - cd /frameworks/opt/net/wifi git fetch https://github.com/PixelExperience/frameworks_opt_net_wifi && git cherry-pick 3bd2c14fbda9c079a4dc39ff4601ba54da589609
-    - cd ../../../..
-    - cd /frameworks/opt/net/ims git fetch https://github.com/PixelExperience/frameworks_opt_net && git cherry-pick 661ae9749b5ea7959aa913f2264dc5e170c63a0a
-    - cd ../../../..
-  build_script:
-    - source build/envsetup.sh
-    - lunch aosp_RMX1941-user
-    - m aex -j$(nproc --all)
-  ccache_stats_script:
-    - ccache -s
-  upload_script: |
-    up() {
-      curl --upload-file $1 https://transfer.sh/$(basename $1); echo
-      # 14 days, 10 GB limit
-    }
+    name: Buildbouuut
+    timeout_in: 122m
+    container:
+      image: mrkhan007/aosp:latest
+      cpu: 8
+      memory: 30G   
+    download_ccache_script:
+      - bash download_ccache
+    sync_script:
+      - bash sync
+    build_script:
+      - bash build
+    upload_ccache_script:
+      - bash upload_ccache
+#start build 
 
-    up out/target/product/RMX1941/*.zip
