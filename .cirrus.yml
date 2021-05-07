@@ -1,25 +1,26 @@
-env: # Environt variable to pass to all tasks
-    CIRRUS_CLONE_DEPTH: 1 # No need to clone with whole history
-    CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone repo
-
-    # For rclone with google drive or any cloud! After first commit pushing, login to https://cirrus-ci.com , click top left corner 3 dot menu, click repository(yourname/aosp-builder) > Repository Settings > Secured Variables > enter content of ~/.config/rclone/rclone.conf (from pc where you setup rclone) > ENCRYPT, copy that ENCRYPTED hash
-    # ENCRYPTED variables is unique for every repository, so you cant use my one, create you rclone config https://rclone.org/drive/#making-your-own-client-id
-    rclone_config: "ENCRYPTED[fd3b54e2313195b4a25f05e37af8a9be488b30eb542f73bae61e2bac67a142869ba7a537ab2ba6e2e4190de3d4ca1899]"
-
 task:
-    name: aosp # Project name
-    timeout_in: 120m # Otherwise it will timeout at 60m automatically, 120m highest in free account
-    container:
-      image: apon77/aosp:latest # It has built in setup environment + repo, aria2, rclone, pigz, username ci, and email ci@ci.ci [You can use your own docker image if you want, or you can use this one too!]
-      cpu: 10  #8 cpu for dummy build, 10 or more cpu for final build, sometimes more than 8 cpu will cause a timelock, so you wont be able to run ci again within few hours, in build script use -j8 or -j10 depending what you used here, otherwise low memory issue will happen, 16cpu highest
-      memory: 24G # So that we can have ram when needed, 24G highest
-    download_ccache_background_script: # To download ccache in background
-      - ./download_ccache # Ccache download script
-    sync_script: # To sync source
-      - ./sync # Source sync script
-    monitor_background_script: # To monitor ccache and machine status every minute, runs in background
-      - ./monitor # Monitor script
-    build_script: # Actual build script foreground
-      - ./build # Build script to run
-    upload_ccache_script: # Upload ccache to cloud foreground
-      - ./upload_ccache # Ccache uploading script
+  name: Build
+  persistent_worker: {}
+  env:
+    USE_CCACHE: 1
+    CIRRUS_WORKING_DIR: /tmp/$CIRRUS_REPO_NAME
+  env_script:
+    - env
+  clone_script:
+    - repo init --depth=1 -u git://github.com/AospExtended/manifest.git -b 11.x || true
+  sync_script:
+    - rm -rf .repo/local_manifests || true
+    - git clone https://github.com/Apon77Lab/android_.repo_local_manifests.git --depth 1 -b aex .repo/local_manifests
+    - repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all)
+  build_script:
+    - source build/envsetup.sh
+    - lunch aosp_RMX1941-user
+    - m aex -j$(nproc --all)
+  ccache_stats_script:
+    - ccache -s
+  upload_script: |
+    up() {
+      curl --upload-file $1 https://transfer.sh/$(basename $1); echo
+      # 14 days, 10 GB limit
+    }
+    up out/target/product/RMX1941/*.zip
