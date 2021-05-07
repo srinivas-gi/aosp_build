@@ -18,7 +18,7 @@ pwd
 ls
 
 ##delete these lines, and replace with your own lines of device sauce
-git clone https://github.com/P-Salik/vendor_realme_RMX1941.git vendor/realme/RMX1941
-git clone https://github.com/P-Salik/device_realme_RMX1941.git device/realme/RMX1941
+git clone https://github.com/P-Salik/android_vendor_realme_RMX1941 vendor/realme/RMX1941
+git clone https://github.com/P-Salik/android_device_realme_RMX1941 device/realme/RMX1941
 
 cd /tmp/rom
