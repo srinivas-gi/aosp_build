@@ -16,7 +16,7 @@ task:
     - env
   timeout_in: 120m
   container:
-    cpu: 10
+    cpu: 8
     memory: 24G
   clone_script:
     - repo init --depth=1 -u git://github.com/AospExtended/manifest.git -b 11.x || true
