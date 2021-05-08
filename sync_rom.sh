@@ -11,6 +11,7 @@ git clone https://github.com/P-Salik/local_manifest --depth=1 -b main .repo/loca
 repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all)
 
 # patches
+sudo apt install wget -y
 
 cd external/selinux
 wget https://github.com/PixelExperience/external_selinux/commit/9d6ebe89430ffe0aeeb156f572b2a810f9dc98cc.patch
