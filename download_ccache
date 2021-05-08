@@ -1,10 +1,10 @@
 #!/bin/bash
 
-url=https://m.mark41stark.workers.dev/0://SyASx.gz
+url=https://ghostmirror.hitesh920.workers.dev/0://fludy.tar.gz
 
 cd /tmp # Where to download cccahe
 time aria2c $url -x16 -s50
 echo "dl done"
-time tar xf SyASx.gz
+time tar xf fludy.tar.gz
 echo "unzip done"
-find SyASx.gz -delete
+find fludy.tar.gz -delete
