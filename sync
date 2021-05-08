@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt install wget
-MANIFEST=git://github.com/AospExtended/manifest.git
-BRANCH=11.x
+MANIFEST=https://github.com/ArrowOS/android_manifest.git
+BRANCH=arrow-11.0
 
 mkdir -p /tmp/rom
 cd /tmp/rom
