@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt install wget
-MANIFEST=https://github.com/PixelPlusUI/manifest
-BRANCH=eleven 
+MANIFEST=git://github.com/DotOS/manifest.git
+BRANCH=dot11
 
 mkdir -p /tmp/rom
 cd /tmp/rom
