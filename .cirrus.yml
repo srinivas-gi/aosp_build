@@ -6,9 +6,9 @@ task:
       cpu: 4
       memory: 8G
     sync_script:
-      - bash sync_rom.sh
+      - bash sync_rom.txt
     build_script:
-      - bash build_rom.sh
+      - bash build_rom.txt
     upload_script:
-      - bash upload_rom.sh
+      - bash upload_rom.txt
 #start build
