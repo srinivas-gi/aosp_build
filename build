@@ -24,7 +24,6 @@ cd ../../../..
 
 cd /tmp/rom
 . build/envsetup.sh
-lunch arrow_RMX1941-userdebug
 export SKIP_API_CHECKS=true
 export SKIP_ABI_CHECKS=true
 cd /tmp/rom
@@ -48,7 +47,7 @@ make_metalava(){
 }
 
 make_rom(){
-	m bacon
+	brunch RMX1941
 	zip=$(up out/target/product/RMX1941/*zip)
 	echo " "
 	echo "$zip"
