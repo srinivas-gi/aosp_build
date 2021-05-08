@@ -6,6 +6,7 @@ env: # Environt variable to pass to all tasks
 
 task:
     name: Buildbouuut
+    persistent_worker: {}
     timeout_in: 122m
     container:
       image: mrkhan007/aosp:latest
@@ -20,5 +21,23 @@ task:
 #    upload_ccache_script:
 #      - bash upload_ccache
 #start build 
-    build_rom_script:
-      - bash build_rom 
+    env:
+      USE_CCACHE: 1
+      CIRRUS_WORKING_DIR: /tmp/$CIRRUS_REPO_NAME
+    env_script:
+      - env
+    clone_script:
+      - repo init -u https://github.com/PixelExperience/manifest -b eleven
+      - git clone https://github.com/P-Salik/local_manifest --depth=1 -b main .repo/local_manifests
+    sync_script:
+      - repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync -j$(nproc --all)
+    build_script:
+      - . build/envsetup.sh
+      - lunch aosp_RMX1941-userdebug
+      - mka bacon -j8
+    upload_script: |
+      up() {
+        curl --upload-file $1 https://transfer.sh/$(basename $1); echo
+        # 14 days, 10 GB limit
+      }
+      up out/target/product/RMX1941/*.zip
