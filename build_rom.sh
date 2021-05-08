@@ -1,6 +1,16 @@
 #!/bin/bash
-cd /tmp/rom
-rm -rf .repo
+
+set -e
+set -x
+
+# sync rom
+repo init --depth=1 -u https://github.com/PixelPlusUI/manifest -b eleven
+repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags
+
+# device
+git clone https://github.com/P-Salik/android_device_realme_RMX1941 device/realme/RMX1941
+
+git clone https://github.com/P-Salik/android_vendor_realme_RMX1941 vendor/realme/RMX1941
 
 cd external/selinux
 wget https://github.com/PixelExperience/external_selinux/commit/9d6ebe89430ffe0aeeb156f572b2a810f9dc98cc.patch
@@ -20,41 +30,17 @@ cd ../../../..
 cd frameworks/opt/net/ims
 wget https://github.com/PixelExperience/frameworks_opt_net_ims/commit/661ae9749b5ea7959aa913f2264dc5e170c63a0a.patch
 patch -p1 < *.patch
-cd ../../../..
+cd ../../../../
 
-cd /tmp/rom
+# build rom
 . build/envsetup.sh
 lunch aosp_RMX1941-userdebug
-export SKIP_API_CHECKS=true
-export SKIP_ABI_CHECKS=true
-cd /tmp/rom
-export CCACHE_DIR=/tmp/ccache  ##use additional flags if you need(optional)
-export CCACHE_EXEC=$(which ccache)
-export USE_CCACHE=1
+mka bacon -j8
 
-ccache -M 30G
-ccache -o compression=true
-ccache -z
-ccache -c
-
+# upload rom
 up(){
-	curl --upload-file $1 https://transfer.sh/
+	curl --upload-file $1 https://transfer.sh/$(basename $1); echo
+	# 14 days, 10 GB limit
 }
 
-make_metalava(){
-	mka api-stubs-docs
-	mka system-api-stubs-docs
-	mka test-api-stubs-docs
-}
-
-make_rom(){
-	mka bacon -j8
-	zip=$(up out/target/product/RMX1941/*zip)
-	echo " "
-	echo "$zip"
-	curl -sL https://git.io/file-transfer | sh
-	./transfer wet out/target/product/RMX1941/*zip
-}
-
-make_metalava
-make_rom
+up out/target/product/RMX1941/*.zip
