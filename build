@@ -48,7 +48,7 @@ make_metalava(){
 }
 
 make_rom(){
-	m bacon
+	mka bacon -j8
 	zip=$(up out/target/product/RMX1941/*zip)
 	echo " "
 	echo "$zip"
