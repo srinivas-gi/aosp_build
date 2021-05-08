@@ -3,7 +3,6 @@ sudo apt install wget
 MANIFEST=https://github.com/ArrowOS/android_manifest.git
 BRANCH=arrow-11.0
 
-rm -rf /temp
 mkdir -p /tmp/rom
 cd /tmp/rom
 
