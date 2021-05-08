@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt install wget
-MANIFEST=https://github.com/PixelExperience/manifest
-BRANCH=eleven
+MANIFEST=https://github.com/aosp-mirror/platform_manifest
+BRANCH=master
 
 mkdir -p /tmp/rom
 cd /tmp/rom
