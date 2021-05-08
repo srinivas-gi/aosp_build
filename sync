@@ -17,7 +17,7 @@ repo sync -c --no-clone-bundle --no-tags --optimized-fetch --prune --force-sync 
 pwd
 ls
 
-# dt and vt
+# Device and Vendor Tree for Realme C2
 git clone https://github.com/P-Salik/android_vendor_realme_RMX1941 vendor/realme/RMX1941
 git clone https://github.com/P-Salik/android_device_realme_RMX1941 device/realme/RMX1941
 
