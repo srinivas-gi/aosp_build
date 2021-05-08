@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo apt install wget
-MANIFEST=https://github.com/PixelExperience/manifest
+MANIFEST=https://github.com/PixelPlusUI/manifest
 BRANCH=eleven 
 
 mkdir -p /tmp/rom
