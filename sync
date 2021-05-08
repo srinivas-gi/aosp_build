@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt install wget
-MANIFEST=https://github.com/Wave-Project/manifest
-BRANCH=r
+MANIFEST=https://github.com/PixelExperience/manifest
+BRANCH=eleven
 
 mkdir -p /tmp/rom
 cd /tmp/rom

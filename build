@@ -23,8 +23,8 @@ patch -p1 < *.patch
 cd ../../../..
 
 cd /tmp/rom
-source build/envsetup.sh
-#lunch aosp_RMX1941-userdebug
+. build/envsetup.sh
+lunch aosp_RMX1941-userdebug
 export SKIP_API_CHECKS=true
 export SKIP_ABI_CHECKS=true
 cd /tmp/rom
@@ -48,7 +48,7 @@ make_metalava(){
 }
 
 make_rom(){
-	brunch RMX1941
+	mka bacon -j8
 	zip=$(up out/target/product/RMX1941/*zip)
 	echo " "
 	echo "$zip"
