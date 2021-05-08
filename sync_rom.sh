@@ -1,10 +1,9 @@
 #!/bin/bash
 
-set -e
-set -x
+set -exv
 
 # sync rom
-repo init -u https://github.com/PixelExperience/manifest -b eleven
+repo init -u https://github.com/ArrowOS/android_manifest.git -b arrow-11.0 --depth=1
 
 git clone https://github.com/P-Salik/local_manifest --depth=1 -b main .repo/local_manifests
 
@@ -31,16 +30,3 @@ cd frameworks/opt/net/ims
 wget https://github.com/PixelExperience/frameworks_opt_net_ims/commit/661ae9749b5ea7959aa913f2264dc5e170c63a0a.patch
 patch -p1 < *.patch
 cd ../../../../
-
-# building rom
-. build/envsetup.sh
-lunch aosp_RMX1941-userdebug
-mka bacon -j8
-
-# upload rom
-up(){
-	curl --upload-file $1 https://transfer.sh/$(basename $1); echo
-	# 14 days, 10 GB limit
-}
-
-up out/target/product/RMX1941/*.zip

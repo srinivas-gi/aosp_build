@@ -1,23 +1,26 @@
-env: # Environt variable to pass to all tasks
-    CIRRUS_CLONE_DEPTH: 1 # No need to clone with whole history
-    CIRRUS_WORKING_DIR: "/tmp/ci" # Where to clone repo
-    rclone_config: "ENCRYPTED[1e4bfe76d933bdff3a61adb9529d60287b19bff7e61797b027ac3df52af879bb5a9d03d72cd0880ff1c01871b31d1e7a"
-
-
 task:
-    name: Buildbot
-    timeout_in: 122m
-    container:
-      image: mrkhan007/aosp:latest
-      cpu: 8
-      memory: 30G   
-    download_ccache_script:
-      - bash download_ccache
-    sync_script:
-      - bash sync
-    build_script:
-      - bash build
-    upload_ccache_script:
-      - bash upload_ccache
-#start build 
-
+  name: Build
+  persistent_worker: {}
+  timeout_in: 90m
+  env:
+    USE_CCACHE: 1
+    ROM_NAME: "grep init sync_rom.sh | cut -d / -f 4"
+    PATH: "~/bin:$PATH"
+  sync_script:
+    - mkdir -p ~/$(bash -c "$ROM_NAME")
+    - cd ~/$(bash -c "$ROM_NAME")
+    - rm -rf .repo/local_manifests
+    - bash $CIRRUS_WORKING_DIR/sync_rom.sh
+  build_script:
+    - ccache -z
+    - cd ~/$(bash -c "$ROM_NAME")
+    - bash $CIRRUS_WORKING_DIR/build_rom.sh
+  ccache_stats_script:
+    - ccache -s
+  upload_script:
+    - cd ~/$(bash -c "$ROM_NAME")
+    - bash $CIRRUS_WORKING_DIR/upload_rom.sh
+  remove_script:
+    - cd ~/$(bash -c "$ROM_NAME")
+    - rm -rf .repo/local_manifests
+    - rm -rf out/target/product/$(grep unch $CIRRUS_WORKING_DIR/build_rom.sh | cut -d _ -f 2 | cut -d - -f 1)/*.zip
