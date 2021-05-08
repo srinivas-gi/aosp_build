@@ -4,6 +4,7 @@ set -exv
 
 sudo apt install wget -y
 #sync rom
+rm -rf *
 
 repo init --depth=1 -u https://github.com/CherishOS/android_manifest.git -b eleven
 
