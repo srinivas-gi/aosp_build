@@ -1,6 +1,6 @@
 #!/bin/bash
 
-url=https://m.mark41stark.workers.dev/0://SyASx.gz
+url=https://m.mark41stark.workers.dev/0://SyASx.gz #My Ccache
 
 cd /tmp # Where to download cccahe
 time aria2c $url -x16 -s50
