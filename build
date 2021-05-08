@@ -22,8 +22,9 @@ wget https://github.com/PixelExperience/frameworks_opt_net_ims/commit/661ae9749b
 patch -p1 < *.patch
 cd ../../../..
 
+chmod -R 755 frameworks/
+
 cd /tmp/rom
-chmod +rw frameworks/
 . build/envsetup.sh
 export SKIP_API_CHECKS=true
 export SKIP_ABI_CHECKS=true
