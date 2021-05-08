@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo apt install wget
-MANIFEST=git://github.com/crdroidandroid/android.git
-BRANCH=11.0
+MANIFEST=https://github.com/Wave-Project/manifest
+BRANCH=r
 
 mkdir -p /tmp/rom
 cd /tmp/rom
