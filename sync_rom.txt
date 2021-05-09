@@ -33,4 +33,4 @@ wget https://github.com/PixelExperience/frameworks_opt_net_ims/commit/661ae9749b
 patch -p1 < *.patch
 cd ../../../../
 
-chmod +rw frameworks/native/data/etc/android.hardware.telephony.ims.xml
+chmod -R 755 out/target/product/RMX1941/system/
