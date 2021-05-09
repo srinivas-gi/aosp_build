@@ -4,8 +4,6 @@ set -exv
 
 sudo apt install wget -y
 
-rm -rf .repo *
-
 #sync rom
 
 repo init --depth=1 -u https://github.com/ArrowOS/android_manifest.git -b arrow-11.0
