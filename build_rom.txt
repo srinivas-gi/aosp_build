@@ -5,5 +5,4 @@ set -exv
 # build rom
 . build/envsetup.sh
 lunch arrow_RMX1941-userdebug
-chmod -R 755 /tmp/rom/out/target/product/RMX1941/system/
-m bacon
+ls
