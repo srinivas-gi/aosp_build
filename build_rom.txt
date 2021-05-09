@@ -5,6 +5,5 @@ set -exv
 # build rom
 . build/envsetup.sh
 lunch arrow_RMX1941-userdebug
-cd out && tree
-cd ..
+ls out
 m bacon
