@@ -2,4 +2,5 @@
 
 set -evx
 
-rm -rf * .repo
+rm -rf .repo *
+
