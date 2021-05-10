@@ -12,7 +12,7 @@ task:
     image: apon77/aosp:latest
     cpu: 8
     memory: 24G
-  download_ccache_script
+  download_ccache_script:
     - bash download_ccache
   sync_script:
     - rm -rf .repo/local_manifests || true
