@@ -23,5 +23,5 @@ task:
     - ccache -s
   upload_script:
     - bash upload_rom.sh
-  upload_ccache_script
+  upload_ccache_script:
     - bash upload_ccache
