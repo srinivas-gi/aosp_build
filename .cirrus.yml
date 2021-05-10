@@ -15,7 +15,7 @@ task:
   download_ccache_script:
     - bash download_ccache
   sync_script:
-    - rm -rf .repo/local_manifests || true
+    - rm -rf .repo || true
     - bash sync_rom.sh
   build_script:
     - bash build_rom.sh
