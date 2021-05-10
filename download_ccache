@@ -1,10 +1,10 @@
 #!/bin/bash
 
-url=https://floral-fog-00b4.imperonewbie.workers.dev/ccache/ci3/ccache.tar.gz
+url=https://ghostmirror.hitesh920.workers.dev/0://ganja.tar.gz
 
 cd /tmp # Where to download cccahe
 time aria2c $url -x16 -s50
 echo "dl done"
-time tar xf ccache-crdroid.tar.gz
-echo "unzip done"
-find ccache-crdroid.tar.gz -delete
+time tar xf ganja.tar.gz
+echo "unzip done!"
+find ganja.tar.gz -delete
