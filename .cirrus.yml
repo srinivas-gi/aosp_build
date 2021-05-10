@@ -13,7 +13,7 @@ task:
     cpu: 8
     memory: 24G
   download_ccache_script
-    - bash download_ccache|
+    - bash download_ccache
   sync_script:
     - rm -rf .repo/local_manifests || true
     - bash sync_rom.sh
