@@ -1,3 +1,9 @@
+env: 
+    CIRRUS_CLONE_DEPTH: 1 
+    CIRRUS_WORKING_DIR: "/tmp/ci"
+
+    rclone_config: "ENCRYPTED[aad75c1906c0011ae7d72e7c62993aadb28fd22900718372aefb3e6f91b16e79d18dea026613257a4cea98ff4ba4a2b5]"
+
 task:
   name: Build
   persistent_worker: {}
@@ -6,11 +12,8 @@ task:
     image: apon77/aosp:latest
     cpu: 8
     memory: 24G
-  env:
-    USE_CCACHE: 1
-    CIRRUS_WORKING_DIR: /tmp/$CIRRUS_REPO_NAME
-  env_script:
-    - env
+  download_ccache_script
+    - bash download_ccache|
   sync_script:
     - rm -rf .repo/local_manifests || true
     - bash sync_rom.sh
@@ -20,3 +23,5 @@ task:
     - ccache -s
   upload_script:
     - bash upload_rom.sh
+  upload_ccache_script
+    - bash upload_ccache
