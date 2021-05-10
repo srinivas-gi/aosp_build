@@ -17,5 +17,5 @@ ccache -o compression=true
 ccache -z
 ccache -c
 
-#chmod -R 755 out/
-#mka bacon -j8
+chmod -R 755 out/
+mka bacon -j4
