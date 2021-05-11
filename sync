@@ -8,6 +8,7 @@ cd /tmp/rom
 
 # Repo init command, that -device,-mips,-darwin,-notdefault part will save you more time and storage to sync, add more according to your rom and choice.Optimization is welcomed! Let's make it quit, and with depth=1 so that no unnecessary things.
 repo init --no-repo-verify --depth=1 -u "$MANIFEST" -b "$BRANCH" -g default,-device,-mips,-darwin,-notdefault
+git clone https://github.com/srinivas-gi/local_manifest .repo/local_manifests
 git config --global user.name "noobsauraj"
 git config --global user.email kumarsauraj24@gmail.com
 
@@ -18,7 +19,7 @@ pwd
 ls
 
 ##delete these lines, and replace with your own lines of device sauce
-git clone https://github.com/P-Salik/android_vendor_realme_RMX1941 vendor/realme/RMX1941
-git clone https://github.com/P-Salik/android_device_realme_RMX1941 device/realme/RMX1941
+git clone https://github.com/srinivas-gi/android_vendor_realme_RMX1941 vendor/realme/RMX1941
+git clone https://github.com/srinivas-gi/android_device_realme_RMX1941 device/realme/RMX1941
 
 cd /tmp/rom
